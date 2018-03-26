@@ -1,0 +1,52 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:NoiseGenerator.ViewModels;assembly=NoiseGenerator"
+        Icon="resm:NoiseGenerator.Assets.avalonia-logo.ico"
+        Title="Noise Texture Generator">
+  <Window.DataContext>
+    <vm:MainWindowViewModel />
+  </Window.DataContext>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="3*"/>
+      <ColumnDefinition Width="1*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="4*"/>
+      <RowDefinition Height="1*"/>
+    </Grid.RowDefinitions>
+
+    <Panel Margin="10,10,10,10">
+      <Image Name="NoiseImage" Source="{Binding Bitmap, Mode=TwoWay}" />
+    </Panel>
+    
+    <StackPanel Grid.Column="1" Grid.Row="0" Background="#7adcf4" >
+
+      <DropDown Items="{Binding NoiseList}" SelectedIndex="0" Background="White"/>
+      
+      <TextBlock Text="Octaves:" />
+      <WrapPanel>
+        <Slider Name="s1" Value="{Binding Octaves, Mode=TwoWay}" Minimum="1" Maximum="5" />
+        <TextBlock Text="{Binding #s1.Value}" />
+      </WrapPanel>
+      
+      <TextBlock Text="Lacunarity:" />
+      <StackPanel Orientation="Horizontal">
+      <Slider Value="{Binding Lacunarity}" Minimum="1" Maximum="20" />
+        <TextBlock Text="{Binding Lacunarity}" />
+      </StackPanel>
+      
+      <TextBlock Text="Persistance:" />
+      <StackPanel Orientation="Horizontal">
+        <Slider Value="{Binding Persistance}" Minimum="0" Maximum="1" />
+          <TextBlock Text="{Binding Persistance}" />
+        </StackPanel>
+      <Button Name="ResetButton" Command="{Binding ResetCommand}" Content="Reset" />
+    </StackPanel>
+    
+    <Panel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="Cyan">
+      
+    </Panel>
+    
+  </Grid>
+</Window>
