@@ -12,11 +12,40 @@ namespace NoiseGenerator.ViewModels
 {
     public class MainWindowViewModel : ReactiveObject
     {
+        private WritableBitmap _bitmap;
+        public WritableBitmap Bitmap {
+            get { return _bitmap; }
+            set {
+                this.RaiseAndSetIfChanged(ref _bitmap, value);
+            }
+        }
 
-        public WritableBitmap Bitmap { get; }
-        public int Octaves { get; set; }
-        public float Lacunarity { get; set; }
-        public float Persistance { get; set; }
+        private int _octaves;
+        public int Octaves {
+            get { return _octaves; }
+            set {
+                Reset();
+                this.RaiseAndSetIfChanged(ref _octaves, value);
+            }
+        }
+
+        private float _lacunarity;
+        public float Lacunarity {
+            get { return _lacunarity; }
+            set {
+                Reset();
+                this.RaiseAndSetIfChanged(ref _lacunarity, value);
+            }
+        }
+
+        private float _persistance;
+        public float Persistance {
+            get { return _persistance; }
+            set {
+                Reset();
+                this.RaiseAndSetIfChanged(ref _persistance, value);
+            }
+        }
 
         public IEnumerable<string> NoiseList { get; set; }
 
@@ -27,8 +56,6 @@ namespace NoiseGenerator.ViewModels
         public unsafe MainWindowViewModel()
         {
             _rand = new Random();
-            Bitmap = new WritableBitmap(100, 100, PixelFormat.Bgra8888);
-
             ResetCommand = new DelegateCommand(Reset);
 
             NoiseList = new List<string>()
@@ -37,39 +64,39 @@ namespace NoiseGenerator.ViewModels
                 "Test2"
             };
 
+            Octaves = 1;
+            Lacunarity = 1;
+            Persistance = 0;
+
             Reset();
         }
 
         public unsafe void Reset()
         {
+            WritableBitmap dummy = new WritableBitmap(100, 100, PixelFormat.Bgra8888);
             _rand = new Random();
-            using (var buf = Bitmap.Lock())
+            using (var buf = dummy.Lock())
             {
                 var ptr = (uint*)buf.Address;
 
-                var w = Bitmap.PixelWidth;
-                var h = Bitmap.PixelHeight;
+                var w = dummy.PixelWidth;
+                var h = dummy.PixelHeight;
 
                 // Clear.
-                for (var i = 0; i < w * (h - 1); i++)
+                for (var i = 0; i < w * h; i++)
                 {
-                    var b = (byte) _rand.Next(0, 255);
-                    var g = (byte)_rand.Next(0, 255);
-                    var r = (byte)_rand.Next(0, 255);
+                    float value = ValueNoise.GetValue(i, i * 2) * 255;
+
+                    var b = (byte)value;
+                    var g = (byte)value;
+                    var r = (byte)value;
 
                     var pixel = b + ((uint)g << 8) + ((uint)r << 16) + ((uint)255 << 24);
                     *(ptr + i) = pixel;
                 }
-
-                // Draw bottom line.
-                for (var i = w * (h - 1); i < w * h; i++)
-                {
-                    *(ptr + i) = uint.MaxValue;
-                }
             }
-
-            Console.WriteLine("Repaint VM");
-            //this.
+            //Console.WriteLine("Repaint");
+            Bitmap = dummy;  
         }
     }
 }

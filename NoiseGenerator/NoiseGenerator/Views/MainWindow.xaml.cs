@@ -5,6 +5,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using NoiseGenerator.ViewModels;
+using ReactiveUI;
 using System;
 using System.Linq;
 
@@ -34,6 +35,8 @@ namespace NoiseGenerator.Views
 
             _resetButton.Click += RepaintImage;
 
+            //var context = (MainWindowViewModel)DataContext;
+            
             Console.WriteLine("Start");
         }
 

@@ -27,19 +27,19 @@
       <TextBlock Text="Octaves:" />
       <WrapPanel>
         <Slider Name="s1" Value="{Binding Octaves, Mode=TwoWay}" Minimum="1" Maximum="5" />
-        <TextBlock Text="{Binding #s1.Value}" />
+        <TextBox Text="{Binding Octaves}" />
       </WrapPanel>
       
       <TextBlock Text="Lacunarity:" />
       <StackPanel Orientation="Horizontal">
-      <Slider Value="{Binding Lacunarity}" Minimum="1" Maximum="20" />
-        <TextBlock Text="{Binding Lacunarity}" />
+      <Slider Value="{Binding Lacunarity}" Minimum="1" Maximum="20"/>
+        <TextBox Text="{Binding Lacunarity}" />
       </StackPanel>
       
       <TextBlock Text="Persistance:" />
       <StackPanel Orientation="Horizontal">
         <Slider Value="{Binding Persistance}" Minimum="0" Maximum="1" />
-          <TextBlock Text="{Binding Persistance}" />
+          <TextBox Text="{Binding Persistance}" />
         </StackPanel>
       <Button Name="ResetButton" Command="{Binding ResetCommand}" Content="Reset" />
     </StackPanel>
