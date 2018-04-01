@@ -44,14 +44,37 @@ namespace NoiseGenerator
 
         private static readonly int hashMask = 255;
 
+        private static float Smooth(float t)
+        {
+            return t * t * t * (t * (t * 6f - 15f) + 10f);
+        }
+
+        static float Lerp(float a, float b, float t)
+        {
+            return a * (1-t) + b * (t);
+        }
+
         public static float GetValue(float x, float y)
         {
-            int ix = (int)MathF.Floor(x);
-            int iy = (int)MathF.Floor(y);
-            ix &= hashMask;
-            iy &= hashMask;
-            
-            return hash[(hash[ix] + iy) & hashMask] * (1f / hashMask);
+            int ix0 = (int)MathF.Floor(x);
+            int iy0 = (int)MathF.Floor(y);
+            float tx = x - ix0;
+            float ty = y - iy0;
+            ix0 &= hashMask;
+            iy0 &= hashMask;
+            int ix1 = ix0 + 1;
+            int iy1 = iy0 + 1;
+
+            int h0 = hash[ix0];
+            int h1 = hash[ix1];
+            int h00 = hash[h0 + iy0];
+            int h10 = hash[h1 + iy0];
+            int h01 = hash[h0 + iy1];
+            int h11 = hash[h1 + iy1];
+
+            tx = Smooth(tx);
+            ty = Smooth(ty);
+            return Lerp(Lerp(h00, h10, tx), Lerp(h01, h11, tx), ty) * (1f / hashMask);
         }
     }
 }

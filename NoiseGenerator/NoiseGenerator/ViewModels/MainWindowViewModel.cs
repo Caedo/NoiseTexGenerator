@@ -20,6 +20,27 @@ namespace NoiseGenerator.ViewModels
             }
         }
 
+        private float _frequency;
+        public float Frequency {
+            get { return _frequency; }
+            set {
+                Reset();
+                this.RaiseAndSetIfChanged(ref _frequency, value);
+            }
+        }
+
+        private float _scale;
+        public float Scale {
+            get { return _scale; }
+            set {
+                if (value != 0)
+                {
+                    Reset();
+                    this.RaiseAndSetIfChanged(ref _scale, value);
+                }
+            }
+        }
+
         private int _octaves;
         public int Octaves {
             get { return _octaves; }
@@ -67,14 +88,19 @@ namespace NoiseGenerator.ViewModels
             Octaves = 1;
             Lacunarity = 1;
             Persistance = 0;
+            Frequency = 1;
+            Scale = 1;
 
             Reset();
         }
 
         public unsafe void Reset()
         {
-            WritableBitmap dummy = new WritableBitmap(100, 100, PixelFormat.Bgra8888);
+            WritableBitmap dummy = new WritableBitmap(512, 512, PixelFormat.Bgra8888);
             _rand = new Random();
+            float offsetX = _rand.Next(-100000, 100000);
+            float offsetY = _rand.Next(-100000, 100000);
+
             using (var buf = dummy.Lock())
             {
                 var ptr = (uint*)buf.Address;
@@ -82,18 +108,33 @@ namespace NoiseGenerator.ViewModels
                 var w = dummy.PixelWidth;
                 var h = dummy.PixelHeight;
 
-                // Clear.
-                for (var i = 0; i < w * h; i++)
+                for (int y = 0; y < w; y++)
                 {
-                    float value = ValueNoise.GetValue(i, i * 2) * 255;
+                    for (int x = 0; x < h; x++)
+                    {
+                        float sampleX = x / Scale * Frequency + offsetX;
+                        float sampleY = y / Scale * Frequency + offsetY;
 
-                    var b = (byte)value;
-                    var g = (byte)value;
-                    var r = (byte)value;
+                        float noiseValue = ValueNoise.GetValue(sampleX, sampleY) * 255;
+                        var pixel = (uint)noiseValue + ((uint)noiseValue << 8) + ((uint)noiseValue << 16) + ((uint)255 << 24);
 
-                    var pixel = b + ((uint)g << 8) + ((uint)r << 16) + ((uint)255 << 24);
-                    *(ptr + i) = pixel;
+                        int ptrOffset = x + w * y;
+                        *(ptr + ptrOffset) = pixel;
+                    }
                 }
+
+                // Clear.
+                //for (var i = 0; i < w * h; i++)
+                //{
+                //    float value = ValueNoise.GetValue(i, i * 2) * 255;
+
+                //    var b = (byte)value;
+                //    var g = (byte)value;
+                //    var r = (byte)value;
+
+                //    var pixel = b + ((uint)g << 8) + ((uint)r << 16) + ((uint)255 << 24);
+                //    *(ptr + i) = pixel;
+                //}
             }
             //Console.WriteLine("Repaint");
             Bitmap = dummy;  

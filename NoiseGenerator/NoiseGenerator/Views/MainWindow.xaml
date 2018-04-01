@@ -23,7 +23,16 @@
     <StackPanel Grid.Column="1" Grid.Row="0" Background="#7adcf4" >
 
       <DropDown Items="{Binding NoiseList}" SelectedIndex="0" Background="White"/>
-      
+      <TextBlock Text="Frequency:" />
+      <WrapPanel>
+        <Slider Value="{Binding Frequency, Mode=TwoWay}" Minimum="1" Maximum="40" />
+        <TextBox Text="{Binding Frequency}" />
+      </WrapPanel>
+      <TextBlock Text="Scale:" />
+      <WrapPanel>
+        <Slider Value="{Binding Scale, Mode=TwoWay}" Minimum="1" Maximum="20" />
+        <TextBox Text="{Binding Scale}" />
+      </WrapPanel>
       <TextBlock Text="Octaves:" />
       <WrapPanel>
         <Slider Name="s1" Value="{Binding Octaves, Mode=TwoWay}" Minimum="1" Maximum="5" />
