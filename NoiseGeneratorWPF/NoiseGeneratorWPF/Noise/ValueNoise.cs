@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace NoiseGenerator
+namespace NoiseGeneratorWPF
 {
-    public class ValueNoise
+    class ValueNoise : INoise
     {
         private static int[] hash = {
         151,160,137, 91, 90, 15,131, 13,201, 95, 96, 53,194,233,  7,225,
@@ -43,23 +46,12 @@ namespace NoiseGenerator
     };
 
         private static readonly int hashMask = 255;
-
-        private static float Smooth(float t)
+        public float GetValue(Vector2 position)
         {
-            return t * t * t * (t * (t * 6f - 15f) + 10f);
-        }
-
-        static float Lerp(float a, float b, float t)
-        {
-            return a * (1-t) + b * (t);
-        }
-
-        public static float GetValue(float x, float y)
-        {
-            int ix0 = (int)MathF.Floor(x);
-            int iy0 = (int)MathF.Floor(y);
-            float tx = x - ix0;
-            float ty = y - iy0;
+            int ix0 = (int)Math.Floor(position.X);
+            int iy0 = (int)Math.Floor(position.Y);
+            float tx = position.X - ix0;
+            float ty = position.Y - iy0;
             ix0 &= hashMask;
             iy0 &= hashMask;
             int ix1 = ix0 + 1;
@@ -72,9 +64,9 @@ namespace NoiseGenerator
             int h01 = hash[h0 + iy1];
             int h11 = hash[h1 + iy1];
 
-            tx = Smooth(tx);
-            ty = Smooth(ty);
-            return Lerp(Lerp(h00, h10, tx), Lerp(h01, h11, tx), ty) * (1f / hashMask);
+            tx = MathHelper.Smooth(tx);
+            ty = MathHelper.Smooth(ty);
+            return MathHelper.Lerp(MathHelper.Lerp(h00, h10, tx), MathHelper.Lerp(h01, h11, tx), ty) * (1f / hashMask);
         }
     }
 }
