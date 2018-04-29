@@ -162,5 +162,10 @@ namespace NoiseGeneratorWPF.ViewModel
             Bitmap = BitmapSource.Create(width, height, 96, 96, pf, null, rawImage, stride);
             NotifyPropertyChanged("Bitmap");
         }
+
+        public void Save()
+        {
+            SaveHelper.SaveBitmap(Bitmap);
+        }
     }
 }

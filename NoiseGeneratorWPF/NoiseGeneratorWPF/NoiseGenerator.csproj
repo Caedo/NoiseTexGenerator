@@ -57,6 +57,7 @@
     <Compile Include="BitmapHelpers\BitmapRenderer.cs" />
     <Compile Include="BitmapHelpers\IBitmapRenderer.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
+    <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Noise\INoise.cs" />
     <Compile Include="Noise\NoiseAttribute.cs" />
     <Compile Include="Noise\NoiseData.cs" />

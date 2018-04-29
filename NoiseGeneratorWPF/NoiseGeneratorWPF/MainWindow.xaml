@@ -91,7 +91,7 @@
         </StackPanel>
 
         <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="Cyan">
-
+            <Button Name="SaveButton" Content="Save" Margin="5,15,5,5" Click="SaveButton_Click"/>
         </DockPanel>
 
     </Grid>

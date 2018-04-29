@@ -32,5 +32,10 @@ namespace NoiseGeneratorWPF
         {
             vm.CreateBitmap();
         }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            vm.Save();
+        }
     }
 }
