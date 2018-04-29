@@ -11,6 +11,7 @@ namespace NoiseGeneratorWPF
     {
         public int width;
         public int height;
+        public int stride;
 
         public float scale;
         public int octaves;

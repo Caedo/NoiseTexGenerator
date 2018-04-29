@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Reflection;
 
 namespace NoiseGeneratorWPF.ViewModel
 {
@@ -66,6 +68,49 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        private float _offsetX;
+        public float OffsetX {
+            get { return _offsetX; }
+            set {
+                if (_offsetX != value)
+                {
+                    _offsetX = value;
+                    CreateBitmap();
+                    NotifyPropertyChanged("OffsetX");
+                }
+            }
+        }
+
+        private float _offsetY;
+        public float OffsetY {
+            get { return _offsetY; }
+            set {
+                if (_offsetY != value)
+                {
+                    _offsetY = value;
+                    CreateBitmap();
+                    NotifyPropertyChanged("OffsetY");
+                }
+            }
+        }
+
+        public ObservableCollection<string> NoiseTypes { get; set; }
+
+        private string _selectedNoiseType;
+        public string SelectedNoiseType {
+            get { return _selectedNoiseType; }
+            set {
+                if (_selectedNoiseType != value)
+                {
+                    _selectedNoiseType = value;
+                    CreateBitmap();
+                    NotifyPropertyChanged("SelectedNoiseType");
+                }
+            }
+        }
+
+        private Dictionary<string, INoise> _noiseDictionary;
+
         public MainWindowVM()
         {
             _scale = 10;
@@ -73,16 +118,20 @@ namespace NoiseGeneratorWPF.ViewModel
             _persistance = 0.5f;
             _octaves = 1;
 
+
+            _noiseDictionary = NoiseHelper.GetNoiseDictionary();
+            NoiseTypes = new ObservableCollection<string>(_noiseDictionary.Select(n => n.Key));
+            SelectedNoiseType = NoiseTypes[0];
+
             CreateBitmap();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        int tester = 0;
+
         public void NotifyPropertyChanged(string propertyName)
         {
-            tester++;
-            Debug.WriteLine("Kappa" + tester);
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            Debug.WriteLine(SelectedNoiseType);
         }
 
         public void CreateBitmap()
@@ -92,22 +141,23 @@ namespace NoiseGeneratorWPF.ViewModel
             int width = 256;
             int height = 256;
             int stride = (width * pf.BitsPerPixel + 7) / 8;
-            
+
 
             NoiseData data = new NoiseData()
             {
                 width = width,
                 height = height,
+                stride = stride,
                 lacunarity = Lacunarity,
                 persistance = Persistance,
                 scale = Scale,
                 octaves = Octaves,
-                offset = new System.Numerics.Vector2(0, 0)
+                offset = new System.Numerics.Vector2(OffsetX, OffsetY)
             };
 
             IBitmapRenderer renderer = new BitmapRenderer();
 
-            byte[] rawImage = renderer.GenerateNoiseMap(data, new ValueNoise());
+            byte[] rawImage = renderer.GenerateNoiseMap(data, _noiseDictionary[SelectedNoiseType]);
 
             Bitmap = BitmapSource.Create(width, height, 96, 96, pf, null, rawImage, stride);
             NotifyPropertyChanged("Bitmap");

@@ -23,7 +23,7 @@
 
         <StackPanel Grid.Column="1" Grid.Row="0" Background="#7adcf4" >
 
-            <!--<ComboBox ItemsSource="{Binding NoiseList}" SelectedIndex="{Binding SelectedNoise}" Background="White"/>-->
+            <ComboBox ItemsSource="{Binding NoiseTypes}" SelectedItem="{Binding SelectedNoiseType}" SelectedIndex="0" Background="White"/>
 
             <TextBlock Text="Scale:" />
             <Grid>
@@ -44,7 +44,7 @@
                 <Slider Value="{Binding Octaves, Mode=TwoWay}" Minimum="1" Maximum="5" Grid.Column="0"/>
                 <TextBox TextAlignment="Center" Text="{Binding Octaves}" Grid.Column="1" MaxWidth="30" />
             </Grid>
-            
+
             <TextBlock Text="Lacunarity:" />
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -64,6 +64,26 @@
                 </Grid.ColumnDefinitions>
                 <Slider Value="{Binding Persistance, Mode=TwoWay}" Minimum="0" Maximum="1" Grid.Column="0"/>
                 <TextBox TextAlignment="Center" Text="{Binding Persistance}" Grid.Column="1" MaxWidth="30" />
+            </Grid>
+            
+            <TextBlock Text="Offset X:" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Slider Value="{Binding OffsetX, Mode=TwoWay}" Minimum="0" Maximum="50" Grid.Column="0"/>
+                <TextBox TextAlignment="Center" Text="{Binding OffsetX}" Grid.Column="1" MaxWidth="30" />
+            </Grid>
+
+            <TextBlock Text="Offset Y:" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Slider Value="{Binding OffsetY, Mode=TwoWay}" Minimum="0" Maximum="50" Grid.Column="0"/>
+                <TextBox TextAlignment="Center" Text="{Binding OffsetY}" Grid.Column="1" MaxWidth="30" />
             </Grid>
 
             <Button Name="RefreshButton" Content="Refresh" Margin="5,15,5,5" Click="RefreshButton_Click"/>

@@ -12,11 +12,12 @@ namespace NoiseGeneratorWPF
     {
         public byte[] GenerateNoiseMap(NoiseData data, INoise noiseClass)
         {
-            PixelFormat pf = PixelFormats.Gray8;
-            int width = data.width;
-            int height = data.height;
-            int stride = (width * pf.BitsPerPixel + 7) / 8;
-            byte[] noiseMap = new byte[stride * height];
+            int stride = data.stride;
+            byte[] noiseMap = new byte[stride * data.height];
+            float[] floatMap = new float[stride * data.height];
+
+            float halfWidth = data.width / 2f;
+            float halfHeight = data.height / 2f;
 
             float scale = data.scale;
             if (scale <= 0)
@@ -24,9 +25,12 @@ namespace NoiseGeneratorWPF
                 scale = 0.0001f;
             }
 
+            float max = float.MinValue;
+            float min = float.MaxValue;
+
             for (int y = 0; y < data.height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = 0; x < data.width; x++)
                 {
 
                     float amplitude = 1;
@@ -36,7 +40,7 @@ namespace NoiseGeneratorWPF
 
                     for (int i = 0; i < data.octaves; i++)
                     {
-                        value += noiseClass.GetValue(new Vector2(x, y) / scale * frequency) * amplitude;
+                        value += noiseClass.GetValue((new Vector2(x - halfWidth, y - halfHeight) + data.offset) / scale * frequency) * amplitude;
                         amplitude *= data.persistance;
                         frequency *= data.lacunarity;
 
@@ -45,7 +49,26 @@ namespace NoiseGeneratorWPF
 
                     value /= range;
 
-                    noiseMap[y * width + x] = (byte)(value * 255);
+                    if (value > max)
+                    {
+                        max = value;
+                    }
+                    if (value < min)
+                    {
+                        min = value;
+                    }
+
+
+                    floatMap[y * data.width + x] = value;
+                }
+            }
+
+            for (int y = 0; y < data.height; y++)
+            {
+                for (int x = 0; x < data.width; x++)
+                {
+                    int pos = y * data.width + x;
+                    noiseMap[pos] = (byte)(MathHelper.InverseLerp(min, max, floatMap[pos]) * 255);
                 }
             }
 
