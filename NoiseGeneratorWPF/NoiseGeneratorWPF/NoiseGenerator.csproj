@@ -56,11 +56,11 @@
     </ApplicationDefinition>
     <Compile Include="BitmapHelpers\BitmapRenderer.cs" />
     <Compile Include="BitmapHelpers\IBitmapRenderer.cs" />
-    <Compile Include="MathHelpers\MathHelper.cs" />
+    <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Noise\INoise.cs" />
     <Compile Include="Noise\NoiseAttribute.cs" />
     <Compile Include="Noise\NoiseData.cs" />
-    <Compile Include="Noise\NoiseHelper.cs" />
+    <Compile Include="Helpers\NoiseHelper.cs" />
     <Compile Include="Noise\PerlinNoise.cs" />
     <Compile Include="Noise\ValueNoise.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
