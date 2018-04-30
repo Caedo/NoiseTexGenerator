@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel Margin="10,10,10,10">
-            <Image Name="NoiseImage" Source="{Binding Bitmap}"/>
+            <Image Name="NoiseImage" Source="{Binding Bitmap}" Cursor="ScrollAll" MouseMove="NoiseImage_MouseMove" DragOver="NoiseImage_DragOver"/>
         </DockPanel>
 
         <StackPanel Grid.Column="1" Grid.Row="0" Background="#7adcf4" >
@@ -31,7 +31,7 @@
                     <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Slider Value="{Binding Scale, Mode=TwoWay}" Minimum="1" Maximum="50" Grid.Column="0"/>
+                <Slider Value="{Binding Scale, Mode=TwoWay}" Minimum="1" Maximum="30" Grid.Column="0"/>
                 <TextBox TextAlignment="Center" Text="{Binding Scale, Mode=TwoWay, StringFormat=F1}" Grid.Column="1" MaxWidth="30" />
             </Grid>
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,9 +17,15 @@ namespace NoiseGeneratorWPF
             BitmapFrame frame = BitmapFrame.Create(bitmap);
             encoder.Frames.Add(frame);
 
-            using(var stream = File.Create("test.png"))
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "PNG File (*.png) |*.png";
+            if (dialog.ShowDialog() == true)
             {
-                encoder.Save(stream);
+
+                using (var stream = File.Create(dialog.FileName))
+                {
+                    encoder.Save(stream);
+                }
             }
         }
     }

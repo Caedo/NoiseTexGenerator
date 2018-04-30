@@ -16,10 +16,12 @@ namespace NoiseGeneratorWPF
             byte[] noiseMap = new byte[stride * data.height];
             float[] floatMap = new float[stride * data.height];
 
-            float halfWidth = data.width / 2f;
-            float halfHeight = data.height / 2f;
+
 
             float scale = data.scale;
+            float halfWidth = scale / 2f;
+            float halfHeight = scale / 2f;
+
             if (scale <= 0)
             {
                 scale = 0.0001f;
@@ -38,9 +40,15 @@ namespace NoiseGeneratorWPF
                     float value = 0;
                     float range = 1;
 
+                    float sampleX = MathHelper.Lerp(0, scale, (float)(x) / data.width);
+                    float sampleY = MathHelper.Lerp(0, scale, (float)(y) / data.height);
+
                     for (int i = 0; i < data.octaves; i++)
                     {
-                        value += noiseClass.GetValue((new Vector2(x - halfWidth, y - halfHeight) + data.offset) / scale * frequency) * amplitude;
+
+                        //System.Diagnostics.Debug.WriteLine($"{sampleX} {sampleY}");
+
+                        value += noiseClass.GetValue((new Vector2(sampleX - halfWidth, sampleY - halfHeight)) * frequency + data.offset) * amplitude;
                         amplitude *= data.persistance;
                         frequency *= data.lacunarity;
 
@@ -58,11 +66,13 @@ namespace NoiseGeneratorWPF
                         min = value;
                     }
 
+                    //
 
                     floatMap[y * data.width + x] = value;
                 }
-            }
 
+            }
+            //System.Diagnostics.Debug.WriteLine($"Min: {min} Max: {max}");
             for (int y = 0; y < data.height; y++)
             {
                 for (int x = 0; x < data.width; x++)
