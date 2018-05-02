@@ -54,8 +54,8 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
-    <Compile Include="BitmapHelpers\BitmapRenderer.cs" />
-    <Compile Include="BitmapHelpers\IBitmapRenderer.cs" />
+    <Compile Include="Bitmap\BitmapRenderer.cs" />
+    <Compile Include="Bitmap\IBitmapRenderer.cs" />
     <Compile Include="Helpers\MathHelper.cs" />
     <Compile Include="Helpers\SaveHelper.cs" />
     <Compile Include="Noise\INoise.cs" />
@@ -64,6 +64,7 @@
     <Compile Include="Helpers\NoiseHelper.cs" />
     <Compile Include="Noise\PerlinNoise.cs" />
     <Compile Include="Noise\ValueNoise.cs" />
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="ViewModel\MainWindowVM.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

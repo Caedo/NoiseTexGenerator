@@ -67,7 +67,7 @@ namespace NoiseGeneratorWPF
 
             tx = MathHelper.Smooth(tx);
             ty = MathHelper.Smooth(ty);
-            return MathHelper.Lerp(MathHelper.Lerp(h00, h10, tx), MathHelper.Lerp(h01, h11, tx), ty) * (1f / hashMask);
+            return MathHelper.Lerp(MathHelper.Lerp(h00, h10, tx), MathHelper.Lerp(h01, h11, tx), ty) * (2f / hashMask) - 1;
         }
     }
 }

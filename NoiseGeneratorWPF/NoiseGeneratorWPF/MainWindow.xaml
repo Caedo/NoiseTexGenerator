@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NoiseGeneratorWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Noise Texture Generator" Height="450" Width="800">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -13,86 +13,108 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="4*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Margin="10,10,10,10">
-            <Image Name="NoiseImage" Source="{Binding Bitmap}" Cursor="ScrollAll" MouseMove="NoiseImage_MouseMove" DragOver="NoiseImage_DragOver"/>
+        <DockPanel Margin="10,10,10,10" Grid.RowSpan="2">
+            <Image Name="NoiseImage" Source="{Binding Bitmap}" Cursor="ScrollAll"/>
         </DockPanel>
 
-        <StackPanel Grid.Column="1" Grid.Row="0" Background="#7adcf4" >
+        <ScrollViewer  Grid.Column="1" Grid.Row="0" VerticalScrollBarVisibility="Auto" Background="#7adcf4">
+            <StackPanel  Margin="5,5,5,5">
 
-            <ComboBox ItemsSource="{Binding NoiseTypes}" SelectedItem="{Binding SelectedNoiseType}" SelectedIndex="0" Background="White"/>
+                <ComboBox ItemsSource="{Binding NoiseTypes}" SelectedItem="{Binding SelectedNoiseType}" SelectedIndex="0" Background="White"/>
 
-            <TextBlock Text="Scale:" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Slider Value="{Binding Scale, Mode=TwoWay}" Minimum="1" Maximum="30" Grid.Column="0"/>
-                <TextBox TextAlignment="Center" Text="{Binding Scale, Mode=TwoWay, StringFormat=F1}" Grid.Column="1" MaxWidth="30" />
-            </Grid>
+                <TextBlock Text="Scale:" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Value="{Binding Scale, Mode=TwoWay}" Minimum="1" Maximum="30" Grid.Column="0"/>
+                    <TextBox TextAlignment="Center" Text="{Binding Scale, Mode=TwoWay, StringFormat=F1}" Grid.Column="1" MaxWidth="30" />
+                </Grid>
 
-            <TextBlock Text="Octaves:" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Slider Value="{Binding Octaves, Mode=TwoWay}" Minimum="1" Maximum="5" Grid.Column="0"/>
-                <TextBox TextAlignment="Center" Text="{Binding Octaves}" Grid.Column="1" MaxWidth="30" />
-            </Grid>
+                <TextBlock Text="Octaves:" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Value="{Binding Octaves, Mode=TwoWay}" Minimum="1" Maximum="5" Grid.Column="0"/>
+                    <TextBox TextAlignment="Center" Text="{Binding Octaves}" Grid.Column="1" MaxWidth="30" />
+                </Grid>
 
-            <TextBlock Text="Lacunarity:" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Slider Value="{Binding Lacunarity, Mode=TwoWay}" Minimum="1" Maximum="6" Grid.Column="0"/>
-                <TextBox TextAlignment="Center" Text="{Binding Lacunarity}" Grid.Column="1" MaxWidth="30" />
-            </Grid>
+                <TextBlock Text="Lacunarity:" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Value="{Binding Lacunarity, Mode=TwoWay}" Minimum="1" Maximum="6" Grid.Column="0"/>
+                    <TextBox TextAlignment="Center" Text="{Binding Lacunarity}" Grid.Column="1" MaxWidth="30" />
+                </Grid>
 
 
-            <TextBlock Text="Persistance:" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Slider Value="{Binding Persistance, Mode=TwoWay}" Minimum="0" Maximum="1" Grid.Column="0"/>
-                <TextBox TextAlignment="Center" Text="{Binding Persistance}" Grid.Column="1" MaxWidth="30" />
-            </Grid>
-            
-            <TextBlock Text="Offset X:" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Slider Value="{Binding OffsetX, Mode=TwoWay}" Minimum="0" Maximum="50" Grid.Column="0"/>
-                <TextBox TextAlignment="Center" Text="{Binding OffsetX}" Grid.Column="1" MaxWidth="30" />
-            </Grid>
+                <TextBlock Text="Persistance:" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Value="{Binding Persistance, Mode=TwoWay}" Minimum="0" Maximum="1" Grid.Column="0"/>
+                    <TextBox TextAlignment="Center" Text="{Binding Persistance}" Grid.Column="1" MaxWidth="30" />
+                </Grid>
 
-            <TextBlock Text="Offset Y:" />
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
-                <Slider Value="{Binding OffsetY, Mode=TwoWay}" Minimum="0" Maximum="50" Grid.Column="0"/>
-                <TextBox TextAlignment="Center" Text="{Binding OffsetY}" Grid.Column="1" MaxWidth="30" />
-            </Grid>
+                <TextBlock Text="Offset X:" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Value="{Binding OffsetX, Mode=TwoWay}" Minimum="0" Maximum="50" Grid.Column="0"/>
+                    <TextBox TextAlignment="Center" Text="{Binding OffsetX}" Grid.Column="1" MaxWidth="30" />
+                </Grid>
 
-            <Button Name="RefreshButton" Content="Refresh" Margin="5,15,5,5" Click="RefreshButton_Click"/>
+                <TextBlock Text="Offset Y:" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+                    <Slider Value="{Binding OffsetY, Mode=TwoWay}" Minimum="0" Maximum="50" Grid.Column="0"/>
+                    <TextBox TextAlignment="Center" Text="{Binding OffsetY}" Grid.Column="1" MaxWidth="30" />
+                </Grid>
 
-        </StackPanel>
+                <CheckBox Content="Turbulance" IsChecked="{Binding Turbulance}"/>
 
-        <DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="Cyan">
-            <Button Name="SaveButton" Content="Save" Margin="5,15,5,5" Click="SaveButton_Click"/>
-        </DockPanel>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto"  Grid.Column="1" Grid.Row="1" Background="Azure">
+            <StackPanel Margin="10,5,10,5">
+                <!--<StackPanel.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="Margin" Value="0,5,0,0"/>
+                    </Style>
+                </StackPanel.Resources>-->
+                <CheckBox Content="Auto Update" IsChecked="{Binding AutoUpdate}" />
+                <Button Content="Refresh" Command="{Binding RefreshCommand}"/>
+                <Label Content="Texture Size:" />
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Width:" />
+                    <TextBox MinWidth="30" Height="20" TextAlignment="Center" Text="{Binding Width}"/>
+                    <Label Content="Height:"/>
+                    <TextBox MinWidth="30" Height="20" TextAlignment="Center" Text="{Binding Height}"/>
+                </StackPanel>
+                <Button Content="Save" Command="{Binding SaveCommand}"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!--<DockPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="Cyan">
+            <Button Name="SaveButton" Content="Save" Margin="5,15,5,5" Click="SaveButton_Click" DockPanel.Dock="Right"/>
+        </DockPanel>-->
 
     </Grid>
 </Window>

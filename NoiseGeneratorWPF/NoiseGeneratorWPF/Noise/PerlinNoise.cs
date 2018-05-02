@@ -93,7 +93,7 @@ namespace NoiseGeneratorWPF
 
             float tx = MathHelper.Smooth(tx0);
             float ty = MathHelper.Smooth(ty0);
-            return MathHelper.Lerp(MathHelper.Lerp(v00, v10, tx), MathHelper.Lerp(v01, v11, tx), ty) * sqr2 * 0.5f + 0.5f;
+            return MathHelper.Lerp(MathHelper.Lerp(v00, v10, tx), MathHelper.Lerp(v01, v11, tx), ty) * sqr2;
         }
     }
 }

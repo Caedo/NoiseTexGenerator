@@ -10,11 +10,17 @@ namespace NoiseGeneratorWPF
 {
     class BitmapRenderer : IBitmapRenderer
     {
+        byte[] noiseMap;
+        float[] floatMap;
+
         public byte[] GenerateNoiseMap(NoiseData data, INoise noiseClass)
         {
             int stride = data.stride;
-            byte[] noiseMap = new byte[stride * data.height];
-            float[] floatMap = new float[stride * data.height];
+            if(noiseMap == null || noiseMap.Length != stride * data.height)
+                noiseMap = new byte[stride * data.height];
+
+            if (floatMap == null || floatMap.Length != stride * data.height)
+                floatMap = new float[stride * data.height];
 
 
 
@@ -40,15 +46,22 @@ namespace NoiseGeneratorWPF
                     float value = 0;
                     float range = 1;
 
-                    float sampleX = MathHelper.Lerp(0, scale, (float)(x) / data.width);
-                    float sampleY = MathHelper.Lerp(0, scale, (float)(y) / data.height);
+                    float sampleX = MathHelper.Lerp(0, scale, (float)(x) / data.width) - halfWidth;
+                    float sampleY = MathHelper.Lerp(0, scale, (float)(y) / data.height) - halfHeight;
 
                     for (int i = 0; i < data.octaves; i++)
                     {
 
                         //System.Diagnostics.Debug.WriteLine($"{sampleX} {sampleY}");
 
-                        value += noiseClass.GetValue((new Vector2(sampleX - halfWidth, sampleY - halfHeight)) * frequency + data.offset) * amplitude;
+                        float noiseValue = noiseClass.GetValue((new Vector2(sampleX, sampleY)) * frequency + data.offset);
+
+                        if (data.turbulance)
+                        {
+                            noiseValue = Math.Abs(noiseValue);
+                        }
+
+                        value += noiseValue * amplitude;
                         amplitude *= data.persistance;
                         frequency *= data.lacunarity;
 
@@ -65,8 +78,6 @@ namespace NoiseGeneratorWPF
                     {
                         min = value;
                     }
-
-                    //
 
                     floatMap[y * data.width + x] = value;
                 }

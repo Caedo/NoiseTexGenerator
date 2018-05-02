@@ -17,8 +17,11 @@ namespace NoiseGeneratorWPF
             BitmapFrame frame = BitmapFrame.Create(bitmap);
             encoder.Frames.Add(frame);
 
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "PNG File (*.png) |*.png";
+            SaveFileDialog dialog = new SaveFileDialog
+            {
+                Filter = "PNG File (*.png) |*.png"
+            };
+
             if (dialog.ShowDialog() == true)
             {
 

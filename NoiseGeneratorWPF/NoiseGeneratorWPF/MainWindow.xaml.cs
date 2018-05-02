@@ -37,15 +37,5 @@ namespace NoiseGeneratorWPF
         {
             vm.Save();
         }
-
-        private void NoiseImage_MouseMove(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        private void NoiseImage_DragOver(object sender, DragEventArgs e)
-        {
-            System.Diagnostics.Debug.WriteLine("asd");
-        }
     }
 }

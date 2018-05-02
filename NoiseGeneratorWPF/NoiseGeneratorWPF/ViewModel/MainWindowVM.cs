@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace NoiseGeneratorWPF.ViewModel
 {
@@ -23,7 +24,8 @@ namespace NoiseGeneratorWPF.ViewModel
                 if (_scale != value)
                 {
                     _scale = value;
-                    CreateBitmap();
+                    if (AutoUpdate)
+                        CreateBitmap();
                     NotifyPropertyChanged("Scale");
                 }
             }
@@ -36,7 +38,8 @@ namespace NoiseGeneratorWPF.ViewModel
                 if (_octaves != value)
                 {
                     _octaves = value;
-                    CreateBitmap();
+                    if (AutoUpdate)
+                        CreateBitmap();
                     NotifyPropertyChanged("Octaves");
                 }
             }
@@ -49,7 +52,8 @@ namespace NoiseGeneratorWPF.ViewModel
                 if (_lacunarity != value)
                 {
                     _lacunarity = value;
-                    CreateBitmap();
+                    if (AutoUpdate)
+                        CreateBitmap();
                     NotifyPropertyChanged("Lacunarity");
                 }
             }
@@ -62,7 +66,8 @@ namespace NoiseGeneratorWPF.ViewModel
                 if (_persistance != value)
                 {
                     _persistance = value;
-                    CreateBitmap();
+                    if (AutoUpdate)
+                        CreateBitmap();
                     NotifyPropertyChanged("Persistance");
                 }
             }
@@ -75,7 +80,8 @@ namespace NoiseGeneratorWPF.ViewModel
                 if (_offsetX != value)
                 {
                     _offsetX = value;
-                    CreateBitmap();
+                    if (AutoUpdate)
+                        CreateBitmap();
                     NotifyPropertyChanged("OffsetX");
                 }
             }
@@ -88,8 +94,65 @@ namespace NoiseGeneratorWPF.ViewModel
                 if (_offsetY != value)
                 {
                     _offsetY = value;
-                    CreateBitmap();
+                    if (AutoUpdate)
+                        CreateBitmap();
                     NotifyPropertyChanged("OffsetY");
+                }
+            }
+        }
+
+        private bool _turbulance;
+        public bool Turbulance {
+            get { return _turbulance; }
+            set {
+                if (_turbulance != value)
+                {
+                    _turbulance = value;
+                    if (AutoUpdate)
+                        CreateBitmap();
+                    NotifyPropertyChanged("Turbulance");
+                }
+            }
+        }
+
+        private bool _autoUpdate;
+        public bool AutoUpdate {
+            get { return _autoUpdate; }
+            set {
+                if (_autoUpdate != value)
+                {
+                    _autoUpdate = value;
+                    if (AutoUpdate)
+                        CreateBitmap();
+                    NotifyPropertyChanged("AutoUpdate");
+                }
+            }
+        }
+
+        private int _width;
+        public int Width {
+            get { return _width; }
+            set {
+                if (_width != value)
+                {
+                    _width = value;
+                    if (AutoUpdate)
+                        CreateBitmap();
+                    NotifyPropertyChanged("Width");
+                }
+            }
+        }
+
+        private int _height;
+        public int Height {
+            get { return _height; }
+            set {
+                if (_height != value)
+                {
+                    _height = value;
+                    if (AutoUpdate)
+                        CreateBitmap();
+                    NotifyPropertyChanged("Height");
                 }
             }
         }
@@ -109,7 +172,12 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        public ICommand RefreshCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
+
         private Dictionary<string, INoise> _noiseDictionary;
+        private IBitmapRenderer _renderer;
+
 
         public MainWindowVM()
         {
@@ -117,11 +185,18 @@ namespace NoiseGeneratorWPF.ViewModel
             _lacunarity = 1;
             _persistance = 0.5f;
             _octaves = 1;
+            _autoUpdate = true;
+            _width = 256;
+            _height = 256;
 
 
             _noiseDictionary = NoiseHelper.GetNoiseDictionary();
             NoiseTypes = new ObservableCollection<string>(_noiseDictionary.Select(n => n.Key));
-            SelectedNoiseType = NoiseTypes[0];
+            _selectedNoiseType = NoiseTypes[0];
+
+            RefreshCommand = new RelayCommand(() => CreateBitmap());
+            SaveCommand = new RelayCommand(() => SaveHelper.SaveBitmap(Bitmap));
+            _renderer = new BitmapRenderer();
 
             CreateBitmap();
         }
@@ -131,35 +206,32 @@ namespace NoiseGeneratorWPF.ViewModel
         public void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            Debug.WriteLine(SelectedNoiseType);
         }
 
         public void CreateBitmap()
         {
-            Debug.WriteLine("Bitmap");
+
+            //Debug.WriteLine("Bitmap");
             PixelFormat pf = PixelFormats.Gray8;
-            int width = 256;
-            int height = 256;
-            int stride = (width * pf.BitsPerPixel + 7) / 8;
+            int stride = (Width * pf.BitsPerPixel + 7) / 8;
 
 
             NoiseData data = new NoiseData()
             {
-                width = width,
-                height = height,
+                width = Width,
+                height = Height,
                 stride = stride,
                 lacunarity = Lacunarity,
                 persistance = Persistance,
                 scale = Scale,
                 octaves = Octaves,
-                offset = new System.Numerics.Vector2(OffsetX, OffsetY)
+                offset = new System.Numerics.Vector2(OffsetX, OffsetY),
+                turbulance = Turbulance
             };
 
-            IBitmapRenderer renderer = new BitmapRenderer();
+            byte[] rawImage = _renderer.GenerateNoiseMap(data, _noiseDictionary[SelectedNoiseType]);
 
-            byte[] rawImage = renderer.GenerateNoiseMap(data, _noiseDictionary[SelectedNoiseType]);
-
-            Bitmap = BitmapSource.Create(width, height, 96, 96, pf, null, rawImage, stride);
+            Bitmap = BitmapSource.Create(Width, Height, 96, 96, pf, null, rawImage, stride);
             NotifyPropertyChanged("Bitmap");
         }
 

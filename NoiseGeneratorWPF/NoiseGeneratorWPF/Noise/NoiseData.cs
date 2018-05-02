@@ -18,5 +18,6 @@ namespace NoiseGeneratorWPF
         public float persistance;
         public float lacunarity;
         public Vector2 offset;
+        public bool turbulance;
     }
 }
