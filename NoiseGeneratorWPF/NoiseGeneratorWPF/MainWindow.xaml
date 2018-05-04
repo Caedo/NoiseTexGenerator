@@ -18,7 +18,7 @@
         </Grid.RowDefinitions>
 
         <DockPanel Margin="10,10,10,10" Grid.RowSpan="2">
-            <Image Name="NoiseImage" Source="{Binding Bitmap}" Cursor="ScrollAll"/>
+            <Image Name="NoiseImage" Source="{Binding Bitmap}" Cursor="ScrollAll" RenderOptions.CachingHint="Cache"/>
         </DockPanel>
 
         <ScrollViewer  Grid.Column="1" Grid.Row="0" VerticalScrollBarVisibility="Auto" Background="#7adcf4">

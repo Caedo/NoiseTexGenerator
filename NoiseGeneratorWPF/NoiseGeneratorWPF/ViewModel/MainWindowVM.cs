@@ -15,7 +15,7 @@ namespace NoiseGeneratorWPF.ViewModel
 {
     class MainWindowVM : INotifyPropertyChanged
     {
-        public BitmapSource Bitmap { get; set; }
+        public WriteableBitmap Bitmap { get; set; }
 
         private float _scale;
         public float Scale {
@@ -37,10 +37,17 @@ namespace NoiseGeneratorWPF.ViewModel
             set {
                 if (_octaves != value)
                 {
+                    //Stopwatch watch = Stopwatch.StartNew();
+                    //watch.Start();
+
                     _octaves = value;
                     if (AutoUpdate)
                         CreateBitmap();
+                    //watch.Stop();
+                    //Debug.WriteLine(watch.ElapsedMilliseconds);
                     NotifyPropertyChanged("Octaves");
+
+
                 }
             }
         }
@@ -186,8 +193,8 @@ namespace NoiseGeneratorWPF.ViewModel
             _persistance = 0.5f;
             _octaves = 1;
             _autoUpdate = true;
-            _width = 256;
-            _height = 256;
+            _width = 1024;
+            _height = 1024;
 
 
             _noiseDictionary = NoiseHelper.GetNoiseDictionary();
@@ -229,10 +236,46 @@ namespace NoiseGeneratorWPF.ViewModel
                 turbulance = Turbulance
             };
 
+
+            //Bitmap = BitmapSource.Create(Width, Height, 96, 96, pf, null, rawImage, stride);
+            if (Bitmap == null)
+            {
+                Bitmap = new WriteableBitmap(Width, Height, 96, 96, pf, null);
+            }
+
+            if (Bitmap.PixelWidth != Width || Bitmap.PixelHeight != Height)
+            {
+                Bitmap = new WriteableBitmap(Width, Height, 96, 96, pf, null);
+            }
+            
             byte[] rawImage = _renderer.GenerateNoiseMap(data, _noiseDictionary[SelectedNoiseType]);
 
-            Bitmap = BitmapSource.Create(Width, Height, 96, 96, pf, null, rawImage, stride);
+            
+            Stopwatch watch = Stopwatch.StartNew();
+            watch.Start();
+            Bitmap.Lock();
+            unsafe
+            {
+                byte* pBackBuffer = (byte*)Bitmap.BackBuffer;
+                var w = Bitmap.PixelWidth;
+                var h = Bitmap.PixelHeight;
+
+                for (int y = 0; y < h; y++)
+                {
+                    for (int x = 0; x < w; x++)
+                    {
+                        int ptrOffset = x + w * y;
+                        *(pBackBuffer + ptrOffset) = rawImage[ptrOffset];
+                    }
+                }
+            }
+            Bitmap.AddDirtyRect(new System.Windows.Int32Rect(0, 0, Bitmap.PixelWidth, Bitmap.PixelWidth));
+            Bitmap.Unlock();
+            
             NotifyPropertyChanged("Bitmap");
+
+            watch.Stop();
+            Debug.WriteLine(watch.ElapsedMilliseconds);
         }
 
         public void Save()
