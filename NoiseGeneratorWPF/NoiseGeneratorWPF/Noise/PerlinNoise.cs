@@ -3,6 +3,9 @@ using System.Numerics;
 
 namespace NoiseGeneratorWPF
 {
+    /// <summary>
+    /// Perlin noise implementation using static hash table and gradient table. Implements <c>INoise Interface</c>
+    /// </summary>
     [Noise("Perlin Noise")]
     class PerlinNoise : INoise
     {
@@ -61,6 +64,11 @@ namespace NoiseGeneratorWPF
 
         private static readonly float sqr2 = (float)Math.Sqrt(2);
 
+        /// <summary>
+        /// Get value of the Perlin noise function at the specific position 
+        /// </summary>
+        /// <param name="position">Position of the noise sample.</param>
+        /// <returns>Returns PErlin noise sample of the given position. The returned value is between -1 and 1.</returns>
         public float GetValue(Vector2 position)
         {
             int ix0 = (int)Math.Floor(position.X);

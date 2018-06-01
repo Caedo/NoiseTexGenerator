@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace NoiseGeneratorWPF
 {
+    /// <summary>
+    /// Implementation of ICommand interface for generic usage.
+    /// </summary>
     public class RelayCommand : ICommand
     {
         #region Fields

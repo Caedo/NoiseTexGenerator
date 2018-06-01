@@ -9,11 +9,21 @@ using System.Windows;
 
 namespace NoiseGeneratorWPF.ViewModel
 {
+    /// <summary>
+    /// ViewModel for <c>MainWindow</c>. Contains all data visible on UI as well as logic for creating Bitmap. 
+    /// Implements <c>INotifyPropertyChanged</c> interface.
+    /// </summary>
     class MainWindowVM : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Bitmap that is visible on the MainWindow.
+        /// </summary>
         public WriteableBitmap Bitmap { get; set; }
 
         private float _scale;
+        /// <summary>
+        /// Scale of the noise function.
+        /// </summary>
         public float Scale {
             get { return _scale; }
             set {
@@ -28,6 +38,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private int _octaves;
+        /// <summary>
+        /// Number of Octaves of fBm algorithm.
+        /// </summary>
         public int Octaves {
             get { return _octaves; }
             set {
@@ -44,6 +57,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private float _lacunarity;
+        /// <summary>
+        /// Lacunarity value of the fBm algorithm.
+        /// </summary>
         public float Lacunarity {
             get { return _lacunarity; }
             set {
@@ -58,6 +74,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private float _persistance;
+        /// <summary>
+        /// Persistance value of the fBm algorithm.
+        /// </summary>
         public float Persistance {
             get { return _persistance; }
             set {
@@ -72,6 +91,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private float _offsetX;
+        /// <summary>
+        /// X value of the offset of the noise function.
+        /// </summary>
         public float OffsetX {
             get { return _offsetX; }
             set {
@@ -86,6 +108,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private float _offsetY;
+        /// <summary>
+        /// Y value of the offset of the noise function.
+        /// </summary>
         public float OffsetY {
             get { return _offsetY; }
             set {
@@ -100,6 +125,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private bool _turbulence;
+        /// <summary>
+        /// Use turbulence method?
+        /// </summary>
         public bool Turbulence {
             get { return _turbulence; }
             set {
@@ -114,6 +142,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private bool _autoUpdate;
+        /// <summary>
+        /// Should bitmap update automaticaly when any property changed?
+        /// </summary>
         public bool AutoUpdate {
             get { return _autoUpdate; }
             set {
@@ -128,6 +159,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private int _width;
+        /// <summary>
+        /// With of the bitmap.
+        /// </summary>
         public int Width {
             get { return _width; }
             set {
@@ -142,6 +176,9 @@ namespace NoiseGeneratorWPF.ViewModel
         }
 
         private int _height;
+        /// <summary>
+        /// Height of the bitmap.
+        /// </summary>
         public int Height {
             get { return _height; }
             set {
@@ -155,9 +192,15 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// Collection of names of noise classes. 
+        /// </summary>
         public ObservableCollection<string> NoiseTypes { get; set; }
 
         private string _selectedNoiseType;
+        /// <summary>
+        /// Currently selected noise type.
+        /// </summary>
         public string SelectedNoiseType {
             get { return _selectedNoiseType; }
             set {
@@ -170,7 +213,13 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// Refresh bitmap command.
+        /// </summary>
         public ICommand RefreshCommand { get; set; }
+        /// <summary>
+        /// Save bitmap on disc command.
+        /// </summary>
         public ICommand SaveCommand { get; set; }
 
         private Dictionary<string, INoise> _noiseDictionary;
@@ -180,7 +229,14 @@ namespace NoiseGeneratorWPF.ViewModel
 
         PixelFormat _pf = PixelFormats.Gray8;
 
+        /// <summary>
+        /// Event that raises when property is changed. Implemented from <c>INotifyPropertyChanged</c> interface.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindowVM"/> class.
+        /// </summary>
         public MainWindowVM()
         {
             _scale = 10;
@@ -213,14 +269,19 @@ namespace NoiseGeneratorWPF.ViewModel
             CreateBitmap();
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void NotifyPropertyChanged(string propertyName)
+        /// <summary>
+        /// Invokation of the PropertyChange event.
+        /// </summary>
+        /// <param name="propertyName">Name of property that was changed</param>
+        private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void CreateBitmap()
+        /// <summary>
+        /// Create noise bitmap with currently used parameters.
+        /// </summary>
+        private void CreateBitmap()
         {
             //Debug.WriteLine("Bitmap");
             int stride = (Width * _pf.BitsPerPixel + 7) / 8;
@@ -256,12 +317,23 @@ namespace NoiseGeneratorWPF.ViewModel
             _worker.RunWorkerAsync();
         }
 
-        void StartGenerate(object sender, DoWorkEventArgs e)
+        /// <summary>
+        /// Start generating bitmap on another thread. Called from Background Worker.
+        /// </summary>
+        /// <param name="sender">Object that calls this method.</param>
+        /// <param name="e">Event arguments.</param>
+        private void StartGenerate(object sender, DoWorkEventArgs e)
         {
             e.Result = _renderer.GenerateNoiseMap(data, _noiseDictionary[SelectedNoiseType]);
         }
 
-        void UpdateBitmap(object sender, RunWorkerCompletedEventArgs e)
+
+        /// <summary>
+        /// Generate bitmap with result of the algorithm. Called from Background Worker.
+        /// </summary>
+        /// <param name="sender">Object that calls this method.</param>
+        /// <param name="e">Event arguments.</param>
+        private void UpdateBitmap(object sender, RunWorkerCompletedEventArgs e)
         {
             byte[] rawImage = (byte[])e.Result;
             Bitmap.Lock();
@@ -272,7 +344,10 @@ namespace NoiseGeneratorWPF.ViewModel
             NotifyPropertyChanged("Bitmap");
         }
 
-        public void Save()
+        /// <summary>
+        /// Save bitmap on disc.
+        /// </summary>
+        private void Save()
         {
             SaveHelper.SaveBitmap(Bitmap);
         }
