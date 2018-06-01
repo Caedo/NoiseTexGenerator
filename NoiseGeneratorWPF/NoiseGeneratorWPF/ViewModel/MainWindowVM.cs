@@ -103,13 +103,13 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
-        private bool _turbulance;
-        public bool Turbulance {
-            get { return _turbulance; }
+        private bool _turbulence;
+        public bool Turbulence {
+            get { return _turbulence; }
             set {
-                if (_turbulance != value)
+                if (_turbulence != value)
                 {
-                    _turbulance = value;
+                    _turbulence = value;
                     if (AutoUpdate)
                         CreateBitmap();
                     NotifyPropertyChanged("Turbulance");
@@ -237,7 +237,7 @@ namespace NoiseGeneratorWPF.ViewModel
                 scale = Scale,
                 octaves = Octaves,
                 offset = new System.Numerics.Vector2(OffsetX, OffsetY),
-                turbulance = Turbulance
+                turbulance = Turbulence
             };
 
             
