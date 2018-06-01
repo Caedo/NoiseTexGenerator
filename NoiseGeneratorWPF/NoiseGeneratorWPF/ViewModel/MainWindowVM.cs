@@ -235,7 +235,7 @@ namespace NoiseGeneratorWPF.ViewModel
                 scale = Scale,
                 octaves = Octaves,
                 offset = new System.Numerics.Vector2(OffsetX, OffsetY),
-                turbulance = Turbulence
+                turbulence = Turbulence
             };
 
             if (Bitmap.PixelWidth != Width || Bitmap.PixelHeight != Height)

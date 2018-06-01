@@ -4,12 +4,21 @@ using System.Diagnostics;
 
 namespace NoiseGeneratorWPF
 {
+    /// <summary>
+    /// Class for creating Bitmaps, implements <c>IBitmapRenderer</c> interface
+    /// </summary>
     class BitmapRenderer : IBitmapRenderer
     {
         //byte[] noiseMap;
         //float[] floatMap;
 
-        public byte[] GenerateNoiseMap(NoiseData data, INoise noiseClass)
+        /// <summary>
+        /// Create bitmap array of noise values
+        /// </summary>
+        /// <param name="data"><c>NoiseData</c> struct with data about noise generation</param>
+        /// <param name="noiseObject"><c>INoise</c> interface that provides noise function</param>
+        /// <returns>Returns array of bytes with pixel values</returns>
+        public byte[] GenerateNoiseMap(NoiseData data, INoise noiseObject)
         {
 #if DEBUG
             Stopwatch watch = Stopwatch.StartNew();
@@ -54,9 +63,9 @@ namespace NoiseGeneratorWPF
 
                         //System.Diagnostics.Debug.WriteLine($"{sampleX} {sampleY}");
 
-                        float noiseValue = noiseClass.GetValue((new Vector2(sampleX, sampleY)) * frequency + data.offset);
+                        float noiseValue = noiseObject.GetValue((new Vector2(sampleX, sampleY)) * frequency + data.offset);
 
-                        if (data.turbulance)
+                        if (data.turbulence)
                         {
                             noiseValue = Math.Abs(noiseValue);
                         }
