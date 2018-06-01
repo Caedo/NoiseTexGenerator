@@ -5,22 +5,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace NoiseGeneratorWPF
 {
     class BitmapRenderer : IBitmapRenderer
     {
-        byte[] noiseMap;
-        float[] floatMap;
+        //byte[] noiseMap;
+        //float[] floatMap;
 
         public byte[] GenerateNoiseMap(NoiseData data, INoise noiseClass)
         {
+#if DEBUG
+            Stopwatch watch = Stopwatch.StartNew();
+            watch.Start();
+#endif
             int stride = data.stride;
-            if(noiseMap == null || noiseMap.Length != stride * data.height)
-                noiseMap = new byte[stride * data.height];
+            //if (noiseMap == null || noiseMap.Length != stride * data.height)
+            byte[] noiseMap = new byte[stride * data.height];
 
-            if (floatMap == null || floatMap.Length != stride * data.height)
-                floatMap = new float[stride * data.height];
+            //if (floatMap == null || floatMap.Length != stride * data.height)
+            float[] floatMap = new float[stride * data.height];
 
 
 
@@ -80,6 +85,7 @@ namespace NoiseGeneratorWPF
                     }
 
                     floatMap[y * data.width + x] = value;
+                    //noiseMap[y * data.width + x] = (byte)((value * 0.5f + 0.5f) * 255);
                 }
 
             }
@@ -92,7 +98,10 @@ namespace NoiseGeneratorWPF
                     noiseMap[pos] = (byte)(MathHelper.InverseLerp(min, max, floatMap[pos]) * 255);
                 }
             }
-
+#if DEBUG
+            watch.Stop();
+            Debug.WriteLine(watch.ElapsedMilliseconds);
+#endif
             return noiseMap;
         }
     }
