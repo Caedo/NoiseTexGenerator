@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Reflection;
 using System.Windows.Input;
+using System.Windows;
 
 namespace NoiseGeneratorWPF.ViewModel
 {
@@ -182,6 +178,9 @@ namespace NoiseGeneratorWPF.ViewModel
         BackgroundWorker _worker;
         NoiseData data;
 
+        PixelFormat _pf = PixelFormats.Gray8;
+
+
         public MainWindowVM()
         {
             _scale = 10;
@@ -209,6 +208,8 @@ namespace NoiseGeneratorWPF.ViewModel
             _worker.DoWork += StartGenerate;
             _worker.RunWorkerCompleted += UpdateBitmap;
 
+            Bitmap = new WriteableBitmap(Width, Height, 96, 96, _pf, null);
+
             CreateBitmap();
         }
 
@@ -221,11 +222,8 @@ namespace NoiseGeneratorWPF.ViewModel
 
         public void CreateBitmap()
         {
-
             //Debug.WriteLine("Bitmap");
-            PixelFormat pf = PixelFormats.Gray8;
-            int stride = (Width * pf.BitsPerPixel + 7) / 8;
-
+            int stride = (Width * _pf.BitsPerPixel + 7) / 8;
 
             data = new NoiseData()
             {
@@ -240,23 +238,17 @@ namespace NoiseGeneratorWPF.ViewModel
                 turbulance = Turbulence
             };
 
-            
-            if (Bitmap == null)
-            {
-                Bitmap = new WriteableBitmap(Width, Height, 96, 96, pf, null);
-            }
-
             if (Bitmap.PixelWidth != Width || Bitmap.PixelHeight != Height)
             {
-                Bitmap = new WriteableBitmap(Width, Height, 96, 96, pf, null);
+                Bitmap = new WriteableBitmap(Width, Height, 96, 96, _pf, null);
             }
 
             if (_worker.IsBusy)
             {
+                _worker.CancelAsync();
                 _worker = new BackgroundWorker()
                 {
                     WorkerSupportsCancellation = true
-
                 };
                 _worker.DoWork += StartGenerate;
                 _worker.RunWorkerCompleted += UpdateBitmap;
@@ -273,8 +265,9 @@ namespace NoiseGeneratorWPF.ViewModel
         {
             byte[] rawImage = (byte[])e.Result;
             Bitmap.Lock();
-            Bitmap.WritePixels(new System.Windows.Int32Rect(0, 0, Width, Height), rawImage, data.stride, 0);
-            Bitmap.AddDirtyRect(new System.Windows.Int32Rect(0, 0, Width, Height));
+            Int32Rect rect = new Int32Rect(0, 0, Width, Height);
+            Bitmap.WritePixels(rect, rawImage, data.stride, 0);
+            Bitmap.AddDirtyRect(rect);
             Bitmap.Unlock();
             NotifyPropertyChanged("Bitmap");
         }

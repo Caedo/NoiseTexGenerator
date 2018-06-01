@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 
 namespace NoiseGeneratorWPF
 {
@@ -16,10 +12,10 @@ namespace NoiseGeneratorWPF
 
         public static float Lerp(float a, float b, float t)
         {
-            return a * (1 - t) + b * (t);
+            return a + (b - a) * t;
         }
 
-        public static float Dot(System.Numerics.Vector2 g, float x, float y)
+        public static float Dot(Vector2 g, float x, float y)
         {
             return g.X * x + g.Y * y;
         }

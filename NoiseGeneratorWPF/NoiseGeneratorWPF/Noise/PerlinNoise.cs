@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NoiseGeneratorWPF
 {
     [Noise("Perlin Noise")]
     class PerlinNoise : INoise
     {
-        private static int[] hash =
+        private static readonly int[] hash =
         {
         151,160,137, 91, 90, 15,131, 13,201, 95, 96, 53,194,233,  7,225,
         140, 36,103, 30, 69,142,  8, 99, 37,240, 21, 10, 23,190,  6,148,
@@ -49,7 +45,7 @@ namespace NoiseGeneratorWPF
 
         private static readonly int hashMask = 255;
 
-        private static Vector2[] gradients2D =
+        private static readonly Vector2[] gradients2D =
         {
         new Vector2( 1f, 0f),
         new Vector2(-1f, 0f),
@@ -63,7 +59,7 @@ namespace NoiseGeneratorWPF
 
         private const int gradientsMask2D = 7;
 
-        private static float sqr2 = (float)Math.Sqrt(2);
+        private static readonly float sqr2 = (float)Math.Sqrt(2);
 
         public float GetValue(Vector2 position)
         {
