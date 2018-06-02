@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace NoiseGeneratorWPF
 {
@@ -67,6 +68,23 @@ namespace NoiseGeneratorWPF
         public static byte InverseLerp(byte a, byte b, byte t)
         {
             return (byte)((t - a) / (b - a));
+        }
+
+
+        /// <summary>
+        /// Clamps given <paramref name="value"/> between <paramref name="min"/> and <paramref name="max"/>
+        /// </summary>
+        /// <typeparam name="T">Type of clamping values</typeparam>
+        /// <param name="value">Value to clamp</param>
+        /// <param name="min">Minimal value</param>
+        /// <param name="max">Maximal value</param>
+        /// <returns>Returns <paramref name="min"/> if <paramref name="value"/> is lower than <paramref name="min"/>, <paramref name="max"/> if greater
+        /// than <paramref name="max"/> of <paramref name="value"/> if between</returns>
+        public static T Clamp<T>(T value, T min, T max) where T : IComparable<T>
+        {
+            if (value.CompareTo(min) < 0) return min;
+            else if (value.CompareTo(max) > 0) return max;
+            else return value;
         }
     }
 }

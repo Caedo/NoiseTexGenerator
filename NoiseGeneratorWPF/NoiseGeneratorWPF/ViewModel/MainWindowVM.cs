@@ -46,7 +46,7 @@ namespace NoiseGeneratorWPF.ViewModel
             set {
                 if (_octaves != value)
                 {
-                    _octaves = value;
+                    _octaves = MathHelper.Clamp(value, 1, 6);
                     if (AutoUpdate)
                         CreateBitmap();
                     NotifyPropertyChanged("Octaves");
@@ -82,7 +82,7 @@ namespace NoiseGeneratorWPF.ViewModel
             set {
                 if (_persistance != value)
                 {
-                    _persistance = value;
+                    _persistance = MathHelper.Clamp(value, 0f, 1f);
                     if (AutoUpdate)
                         CreateBitmap();
                     NotifyPropertyChanged("Persistance");
@@ -167,7 +167,7 @@ namespace NoiseGeneratorWPF.ViewModel
             set {
                 if (_width != value)
                 {
-                    _width = value;
+                    _width = MathHelper.Clamp(value, 1, 4096);
                     if (AutoUpdate)
                         CreateBitmap();
                     NotifyPropertyChanged("Width");
@@ -184,7 +184,7 @@ namespace NoiseGeneratorWPF.ViewModel
             set {
                 if (_height != value)
                 {
-                    _height = value;
+                    _height = MathHelper.Clamp(value, 1, 4096);
                     if (AutoUpdate)
                         CreateBitmap();
                     NotifyPropertyChanged("Height");
