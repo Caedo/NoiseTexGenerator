@@ -9,6 +9,13 @@ NoiseTex is a simple application for creating and saving noise textures with ple
 * Turbulence option for creating sharp valleys
 * Saving texture as .png file
 
+![Perlin](img/perlin.png)
+![Value](img/value.png) 
+
+![fBm](img/fBm.png) 
+![turbulance](img/turbulence.png)
+
+
 
 # Compiling and extending
 ## Requirements
