@@ -10,7 +10,13 @@ namespace NoiseGeneratorWPF
     {
         #region Fields
 
+        /// <summary>
+        /// Action that is Invoked when Command is executed
+        /// </summary>
         readonly Action _execute = null;
+        /// <summary>
+        /// Func that determine if Command can be executed
+        /// </summary>
         readonly Func<bool> _canExecute = null;
 
         #endregion

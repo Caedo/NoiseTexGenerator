@@ -222,11 +222,27 @@ namespace NoiseGeneratorWPF.ViewModel
         /// </summary>
         public ICommand SaveCommand { get; set; }
 
+        /// <summary>
+        /// Dictionary with noise name as key and instance of INoise as value
+        /// </summary>
         private Dictionary<string, INoise> _noiseDictionary;
+        /// <summary>
+        /// Instance of IBitmapRenderer 
+        /// </summary>
         private IBitmapRenderer _renderer;
+        /// <summary>
+        /// BackgroundWorker used for threading
+        /// </summary>
         BackgroundWorker _worker;
-        NoiseData data;
 
+        /// <summary>
+        /// NoiseData struct
+        /// </summary>
+        NoiseData _data;
+
+        /// <summary>
+        /// Current pixelformat used for creating bitmap
+        /// </summary>
         PixelFormat _pf = PixelFormats.Gray8;
 
         /// <summary>
@@ -286,7 +302,7 @@ namespace NoiseGeneratorWPF.ViewModel
             //Debug.WriteLine("Bitmap");
             int stride = (Width * _pf.BitsPerPixel + 7) / 8;
 
-            data = new NoiseData()
+            _data = new NoiseData()
             {
                 width = Width,
                 height = Height,
@@ -324,7 +340,7 @@ namespace NoiseGeneratorWPF.ViewModel
         /// <param name="e">Event arguments.</param>
         private void StartGenerate(object sender, DoWorkEventArgs e)
         {
-            e.Result = _renderer.GenerateNoiseMap(data, _noiseDictionary[SelectedNoiseType]);
+            e.Result = _renderer.GenerateNoiseMap(_data, _noiseDictionary[SelectedNoiseType]);
         }
 
 
@@ -338,7 +354,7 @@ namespace NoiseGeneratorWPF.ViewModel
             byte[] rawImage = (byte[])e.Result;
             Bitmap.Lock();
             Int32Rect rect = new Int32Rect(0, 0, Width, Height);
-            Bitmap.WritePixels(rect, rawImage, data.stride, 0);
+            Bitmap.WritePixels(rect, rawImage, _data.stride, 0);
             Bitmap.AddDirtyRect(rect);
             Bitmap.Unlock();
             NotifyPropertyChanged("Bitmap");

@@ -9,6 +9,9 @@ namespace NoiseGeneratorWPF
     [Noise("Value Noise")]
     class ValueNoise : INoise
     {
+        /// <summary>
+        /// Hash table used for generating noise
+        /// </summary>
         private static readonly int[] hash =
         {
         151,160,137, 91, 90, 15,131, 13,201, 95, 96, 53,194,233,  7,225,
@@ -46,6 +49,9 @@ namespace NoiseGeneratorWPF
         222,114, 67, 29, 24, 72,243,141,128,195, 78, 66,215, 61,156,180
         };
 
+        /// <summary>
+        /// Mask for the hash table size (faster modulo)
+        /// </summary>
         private static readonly int hashMask = 255;
 
         /// <summary>

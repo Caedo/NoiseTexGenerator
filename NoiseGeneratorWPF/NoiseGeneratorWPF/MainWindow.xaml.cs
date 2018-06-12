@@ -7,7 +7,14 @@ namespace NoiseGeneratorWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// ViewModel
+        /// </summary>
         ViewModel.MainWindowVM vm;
+
+        /// <summary>
+        /// Standard constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();

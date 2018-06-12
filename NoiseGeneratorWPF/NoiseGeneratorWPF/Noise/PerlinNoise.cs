@@ -9,6 +9,9 @@ namespace NoiseGeneratorWPF
     [Noise("Perlin Noise")]
     class PerlinNoise : INoise
     {
+        /// <summary>
+        /// Hash table used for generating noise
+        /// </summary>
         private static readonly int[] hash =
         {
         151,160,137, 91, 90, 15,131, 13,201, 95, 96, 53,194,233,  7,225,
@@ -46,8 +49,14 @@ namespace NoiseGeneratorWPF
         222,114, 67, 29, 24, 72,243,141,128,195, 78, 66,215, 61,156,180
         };
 
+        /// <summary>
+        /// Mask for the hash table size (faster modulo)
+        /// </summary>
         private static readonly int hashMask = 255;
 
+        /// <summary>
+        /// Array of gradient directions used for generating noise
+        /// </summary>
         private static readonly Vector2[] gradients2D =
         {
         new Vector2( 1f, 0f),
@@ -60,8 +69,14 @@ namespace NoiseGeneratorWPF
         Vector2.Normalize(new Vector2(-1f,-1f))
         };
 
+        /// <summary>
+        /// Mask for the gradient table size (faster modulo)
+        /// </summary>
         private const int gradientsMask2D = 7;
 
+        /// <summary>
+        /// Value of the square root of 2
+        /// </summary>
         private static readonly float sqr2 = (float)Math.Sqrt(2);
 
         /// <summary>
