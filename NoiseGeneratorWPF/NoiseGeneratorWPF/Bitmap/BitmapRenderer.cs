@@ -9,8 +9,6 @@ namespace NoiseGeneratorWPF
     /// </summary>
     class BitmapRenderer : IBitmapRenderer
     {
-        //byte[] noiseMap;
-        //float[] floatMap;
 
         /// <summary>
         /// Create bitmap array of noise values
@@ -25,10 +23,8 @@ namespace NoiseGeneratorWPF
             watch.Start();
 #endif
             int stride = data.stride;
-            //if (noiseMap == null || noiseMap.Length != stride * data.height)
             byte[] noiseMap = new byte[stride * data.height];
 
-            //if (floatMap == null || floatMap.Length != stride * data.height)
             float[] floatMap = new float[stride * data.height];
 
 

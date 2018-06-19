@@ -20,6 +20,9 @@ namespace NoiseGeneratorWPF.ViewModel
         /// </summary>
         public WriteableBitmap Bitmap { get; set; }
 
+        /// <summary>
+        /// private variable of property Scale
+        /// </summary>
         private float _scale;
         /// <summary>
         /// Scale of the noise function.
@@ -37,6 +40,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property Octaves
+        /// </summary>
         private int _octaves;
         /// <summary>
         /// Number of Octaves of fBm algorithm.
@@ -56,6 +62,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property Lacunarity
+        /// </summary>
         private float _lacunarity;
         /// <summary>
         /// Lacunarity value of the fBm algorithm.
@@ -73,6 +82,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property Persistance
+        /// </summary>
         private float _persistance;
         /// <summary>
         /// Persistance value of the fBm algorithm.
@@ -90,6 +102,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property OffsetX
+        /// </summary>
         private float _offsetX;
         /// <summary>
         /// X value of the offset of the noise function.
@@ -107,6 +122,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property OffsetY
+        /// </summary>
         private float _offsetY;
         /// <summary>
         /// Y value of the offset of the noise function.
@@ -124,6 +142,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property Turbulence
+        /// </summary>
         private bool _turbulence;
         /// <summary>
         /// Use turbulence method?
@@ -141,6 +162,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property AutoUpdate
+        /// </summary>
         private bool _autoUpdate;
         /// <summary>
         /// Should bitmap update automaticaly when any property changed?
@@ -158,6 +182,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property Width
+        /// </summary>
         private int _width;
         /// <summary>
         /// With of the bitmap.
@@ -175,6 +202,9 @@ namespace NoiseGeneratorWPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// private variable of property Height
+        /// </summary>
         private int _height;
         /// <summary>
         /// Height of the bitmap.
